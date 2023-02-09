@@ -6,7 +6,7 @@ usage:
   setup: true
 
   orbs:
-    test-harness: GovStackWorkingGroup/testutils@0.1.7
+    test-harness: govstack-working-group/testutils@0.1.7
 
   workflows:
     test_everything:
