@@ -52,14 +52,29 @@ jobs:
               exit 1
             fi
 
-            curl -v -F buildingBlock=${CIRCLE_PROJECT_REPONAME}    \
-                    -F report=@${TEST_RESULT_REPORT_PATH}          \
-                    -F META=@${TEST_PRODUCT_META_PATH}          \
-                    -F testSuite=<< parameters.test-suite-name >>  \
-                    -F testApp=<< parameters.example-app-name >>   \
-                    -F sourceBranch=${CIRCLE_BRANCH}               \
-                    -H "x-api-key: ${TEST_RESULTS_STORAGE_API_KEY}"\
-                    "${TEST_RESULT_STORAGE_URL}"
+            if [ -f "$TEST_PRODUCT_META_PATH" ]; then
+              # Meta file is not mandatory but curl will return 26 code if it's missing.
+              curl -v -F buildingBlock=${CIRCLE_PROJECT_REPONAME}    \
+                -F report=@${TEST_RESULT_REPORT_PATH}          \
+                -F META=@${TEST_PRODUCT_META_PATH}          \
+                -F testSuite=<< parameters.test-suite-name >>  \
+                -F testApp=<< parameters.example-app-name >>   \
+                -F sourceBranch=${CIRCLE_BRANCH}               \
+                -H "x-api-key: ${TEST_RESULTS_STORAGE_API_KEY}"\
+                "${TEST_RESULT_STORAGE_URL}"
+            else
+              curl -v -F buildingBlock=${CIRCLE_PROJECT_REPONAME}    \
+                -F report=@${TEST_RESULT_REPORT_PATH}          \
+                -F testSuite=<< parameters.test-suite-name >>  \
+                -F testApp=<< parameters.example-app-name >>   \
+                -F sourceBranch=${CIRCLE_BRANCH}               \
+                -H "x-api-key: ${TEST_RESULTS_STORAGE_API_KEY}"\
+                "${TEST_RESULT_STORAGE_URL}"
+            fi
+
+            exit $?
+
+
 
 
 workflows:
