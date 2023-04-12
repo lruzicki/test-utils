@@ -31,6 +31,7 @@ jobs:
           name: Export test results
           command: |
             export TEST_RESULT_REPORT_PATH=<< parameters.test-suite-path >>/result/example_result.message
+            export TEST_PRODUCT_META_PATH=<< parameters.example-app-path >>/META.yml
             # API POST call is executed using exported result file and additional execution information as an input
             if ! [ -f "$TEST_RESULT_REPORT_PATH" ]; then
                 echo "Report file has to be available under ${TEST_RESULT_REPORT_PATH} directory"
@@ -53,6 +54,7 @@ jobs:
 
             curl -v -F buildingBlock=${CIRCLE_PROJECT_REPONAME}    \
                     -F report=@${TEST_RESULT_REPORT_PATH}          \
+                    -F META=@${TEST_PRODUCT_META_PATH}          \
                     -F testSuite=<< parameters.test-suite-name >>  \
                     -F testApp=<< parameters.example-app-name >>   \
                     -F sourceBranch=${CIRCLE_BRANCH}               \
