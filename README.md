@@ -47,5 +47,5 @@ You can find this tag in the logs of the `Publishing Orb Release` step of the `o
 
 When you find this tag, you can then use it in the Circle config of other building blocks on feature branches in order to test your changes.
 
-*Important*: do not use dev versions of the orb on the main branch of any building block.
+**Important**: do not use dev versions of the orb on the main branch of any building block.
 
