@@ -32,3 +32,20 @@ We welcome [issues](https://github.com/GovStackWorkingGroup/test-utils/issues) t
 5. Now ensure the version tag selected is semantically accurate based on the changes included.
 6. Click _"Publish Release"_.
     - This will push a new tag and trigger your publishing pipeline on CircleCI.
+
+### Development and testing
+
+When you create a feature branch and push commits to it, the orb will be published on Circle with a dev tag, which can be used for testing.
+
+This tag will have the following form:
+
+```
+govstack-working-group/testutils@dev:<HASH>
+```
+
+You can find this tag in the logs of the `Publishing Orb Release` step of the `orb-tools/publish` job in the `lint-pack` pipeline.
+
+When you find this tag, you can then use it in the Circle config of other building blocks on feature branches in order to test your changes.
+
+*Important*: do not use dev versions of the orb on the main branch of any building block.
+
