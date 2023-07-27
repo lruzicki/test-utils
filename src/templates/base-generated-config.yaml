@@ -19,13 +19,32 @@ jobs:
       - run:
           name: Execute tests
           command: |
+            echo "# Execute application test_entrypoint.sh in background."
             # Execute application test_entrypoint.sh in background.
             chmod u+x << parameters.example-app-path >>/test_entrypoint.sh
             cd << parameters.example-app-path >> && ./test_entrypoint.sh
 
+            # Check for testCustomParameters.json
+            if [ -f << parameters.example-app-path >>/testCustomParameters.json ]; then
+              cp << parameters.example-app-path >>/testCustomParameters.json << parameters.test-suite-path >>
+              echo "File testCustomParameters.json has been copied to << parameters.test-suite-path >>."
+            else
+              echo "File testCustomParameters.json does not exist in << parameters.example-app-path >>."
+            fi
+
             # Execute gherkin tests for given application using test_entrypoint.sh
             chmod u+x << parameters.test-suite-path >>/test_entrypoint.sh
             cd << parameters.test-suite-path >> && ./test_entrypoint.sh
+
+            # Execute script responsible for updating placeholders in the generated report
+            if [ -f << parameters.test-suite-path >>/gherkin_param_manager.sh ]; then
+              chmod u+x << parameters.test-suite-path >>/gherkin_param_manager.sh
+              sudo chmod uo+w << parameters.test-suite-path >>/result
+              cd << parameters.test-suite-path >> && ./gherkin_param_manager.sh result/example_result.message
+            else
+              echo "The script gherkin_param_manager.sh is not present in << parameters.test-suite-path >>."
+            fi
+
       - store_test_results:
           path: << parameters.test-suite-path >>/result
       - checkout
