@@ -28,7 +28,7 @@ jobs:
             echo "# Execute application test_entrypoint.sh in background."
             # Execute application test_entrypoint.sh in background.
             chmod u+x << parameters.example-app-path >>/test_entrypoint.sh
-            cd << parameters.example-app-path >> && ./test_entrypoint.sh
+            cd << parameters.example-app-path >> && ./test_entrypoint.sh << parameters.bb-version >>
 
             # Check for testCustomParameters.json
             if [ -f << parameters.example-app-path >>/testCustomParameters.json ]; then
@@ -67,7 +67,7 @@ jobs:
 
             if [[ -z "${TEST_RESULTS_STORAGE_API_KEY}" ]]; then
               echo "No Test Result Storage API Key detected."
-              echo "Please set the TEST_RESULTS_STORAGE_API_KEY environment variable."
+              echo "Please set the TEST_RESULTS_STORAGE_API_KEY environment variable. test mess"
               echo "Aborting test result export."
               exit 1
             fi
@@ -102,9 +102,6 @@ jobs:
             fi
 
             exit $?
-
-
-
 
 workflows:
   test_everything:
