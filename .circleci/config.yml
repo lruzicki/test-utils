@@ -19,21 +19,21 @@ workflows:
           filters: *filters
       - shellcheck/check:
           filters: *filters
-      # - orb-tools/publish:
-      #     context: orb-publishing
-      #     filters:
-      #       tags:
-      #         only: /.*/
-      #     orb-name: govstack-working-group/testutils
-      #     requires:
-      #       - orb-tools/lint
-      #       - orb-tools/review
-      #       - orb-tools/pack
-      #       - shellcheck/check
-      #     vcs-type: << pipeline.project.type >>
+      - orb-tools/publish:
+          context: orb-publishing
+          filters:
+            tags:
+              only: /.*/
+          orb-name: govstack-working-group/testutils
+          requires:
+            - orb-tools/lint
+            - orb-tools/review
+            - orb-tools/pack
+            - shellcheck/check
+          vcs-type: << pipeline.project.type >>
       # Triggers the next workflow in the Orb Development Kit.
       - orb-tools/continue:
           pipeline-number: << pipeline.number >>
           vcs-type: << pipeline.project.type >>
-          # requires: [orb-tools/publish]
+          requires: [orb-tools/publish]
           filters: *filters
