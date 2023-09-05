@@ -11,10 +11,16 @@ jobs:
         type: string
       test-suite-path:
         type: string
+      bb-version:
+        type: string
     machine:
       image: ubuntu-2004:current
       docker_layer_caching: true
     steps:
+      - checkout
+      - run:
+          name: Checkout Specific Version
+          command: git checkout << parameters.bb-version >>
       - checkout
       - run:
           name: Execute tests
@@ -46,7 +52,7 @@ jobs:
             fi
 
       - store_test_results:
-          path: << parameters.test-suite-path >>/result
+          path: << parameters.test-suite-path >>/result/<< parameters.bb-version >>_example_result.message
       - checkout
       - run:
           name: Export test results
@@ -77,6 +83,7 @@ jobs:
               # Meta file is not mandatory but curl will return 26 code if it's missing.
               curl -v -F buildingBlock=${CIRCLE_PROJECT_REPONAME} \
                 -F report=@${TEST_RESULT_REPORT_PATH}             \
+                -F version=<< parameters.bb-version >>            \  # Adding tag as version
                 -F META=@${TEST_PRODUCT_META_PATH}                \
                 -F testSuite=<< parameters.test-suite-name >>     \
                 -F testApp=<< parameters.example-app-name >>      \
@@ -86,6 +93,7 @@ jobs:
             else
               curl -v -F buildingBlock=${CIRCLE_PROJECT_REPONAME} \
                 -F report=@${TEST_RESULT_REPORT_PATH}             \
+                -F version=<< parameters.bb-version >>            \  # Adding tag as version
                 -F testSuite=<< parameters.test-suite-name >>     \
                 -F testApp=<< parameters.example-app-name >>      \
                 -F sourceBranch=${CIRCLE_BRANCH}                  \
