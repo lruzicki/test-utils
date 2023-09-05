@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  testutils: govstack-working-group/testutils@1.0.3
+  testutils: govstack-working-group/testutils@7.3.12
   orb-tools: circleci/orb-tools@11.5
 
 filters: &filters
