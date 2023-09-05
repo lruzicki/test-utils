@@ -17,7 +17,6 @@ jobs:
       image: ubuntu-2004:current
       docker_layer_caching: true
     steps:
-      - checkout
       - run:
           name: Checkout Specific Version
           command: git checkout << parameters.bb-version >>
