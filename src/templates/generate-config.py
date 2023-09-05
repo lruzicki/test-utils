@@ -29,6 +29,10 @@ def is_valid(test_harness_path):
 
 def get_git_tags():
     tags = subprocess.getoutput("git tag -l")
+    print("\n\n\nGit tags\n\n\n -----------------")
+    print(tags)
+    print("\n\n\nGit tags\n\n\n -----------------")
+    # here i have to add regex
     return tags.strip().split("\n")
 
 def app_and_name_from_path(test_harness_path): 
