@@ -65,7 +65,7 @@ jobs:
                 echo "Report file has to be available under ${TEST_RESULT_REPORT_PATH} directory"
                 exit 1
             fi
-
+            echo ${TEST_RESULT_STORAGE_URL}
             if [[ -z "${TEST_RESULTS_STORAGE_API_KEY}" ]]; then
               echo "No Test Result Storage API Key detected."
               echo "Please set the TEST_RESULTS_STORAGE_API_KEY environment variable. test mess"
