@@ -19,7 +19,9 @@ jobs:
     steps:
       - run:
           name: Checkout Specific Version
-          command: git checkout << parameters.bb-version >>
+          command: |
+          git fetch --tags
+          git checkout << parameters.bb-version >>
       - run:
           name: Execute tests
           command: |

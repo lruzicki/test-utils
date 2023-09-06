@@ -28,8 +28,9 @@ def is_valid(test_harness_path):
   return True 
 
 def get_git_tags():
-    tags = subprocess.getoutput("git tag -l | grep -E -w 'v(0|([1-9][0-9]*)\.(0|([1-9][0-9]*))\.(0|[1-9][0-9]*))|latest'")
-    return tags.strip().split("\n")
+  regex = "v(0|([1-9][0-9]*)\.(0|([1-9][0-9]*))\.(0|[1-9][0-9]*))|latest"
+  tags = subprocess.getoutput(f"git tag -l | grep -E -w '{regex}'")
+  return tags.strip().split("\n")
 
 def app_and_name_from_path(test_harness_path): 
     test_path = str(pathlib.Path(test_harness_path).absolute())
