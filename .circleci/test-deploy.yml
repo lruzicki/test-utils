@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  testutils: lruzicki/testutils@7.3.12
+  testutils: lruzicki/testutils@volatile
   orb-tools: circleci/orb-tools@11.5
 
 filters: &filters
