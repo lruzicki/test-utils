@@ -20,8 +20,8 @@ jobs:
       - run:
           name: Checkout Specific Version
           command: |
-          git fetch --tags
-          git checkout << parameters.bb-version >>
+            git fetch --tags
+            git checkout << parameters.bb-version >>
       - run:
           name: Execute tests
           command: |
