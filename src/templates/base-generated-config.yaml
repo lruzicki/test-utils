@@ -31,6 +31,7 @@ jobs:
             echo "Listing temp_repo contents:"
             ls
             echo "ls^"
+            rm -rf << parameters.test-suite-path >>
             NUM_FILES=$(find << parameters.test-suite-path >> -type f | wc -l)
             echo "Number of files in << parameters.test-suite-path >>: $NUM_FILES"
 
