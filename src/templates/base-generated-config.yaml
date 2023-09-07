@@ -24,7 +24,14 @@ jobs:
             git clone . temp_repo
             cd temp_repo
             git checkout << parameters.bb-version >>
-            cp -r << parameters.test-suite-path >> ..<< parameters.test-suite-path >>
+            BASE_NAME=$(basename << parameters.test-suite-path >>)
+            DIR_NAME=$(dirname << parameters.test-suite-path >>)
+
+            echo "BASE_NAME: $BASE_NAME"
+            echo "DIR_NAME: $DIR_NAME"
+
+            mkdir -p ../$DIR_NAME
+            cp -r $DIR_NAME/$BASE_NAME ../$DIR_NAME/
             cd ..
             rm -rf temp_repo
 
