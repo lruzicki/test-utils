@@ -32,7 +32,7 @@ jobs:
             ls
             echo "ls^"
             rm -rf << parameters.test-suite-path >>
-            cp -r test << parameters.test-suite-path >>
+            cp -r test/* << parameters.test-suite-path >>
             NUM_FILES=$(find << parameters.test-suite-path >> -type f | wc -l)
             echo "Number of files in << parameters.test-suite-path >>: $NUM_FILES"
 
