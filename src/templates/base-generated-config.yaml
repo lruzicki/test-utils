@@ -19,17 +19,22 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Checkout Specific Version
+          name: Checkout Test Suite from Specific Version
           command: |
-            git fetch --tags
+            git clone . temp_repo
+            cd temp_repo
             git checkout << parameters.bb-version >>
+            cp -r << parameters.test-suite-path >> ..<< parameters.test-suite-path >>
+            cd ..
+            rm -rf temp_repo
+
       - run:
           name: Execute tests
           command: |
             echo "# Execute application test_entrypoint.sh in background."
             # Execute application test_entrypoint.sh in background.
             chmod u+x << parameters.example-app-path >>/test_entrypoint.sh
-            cd << parameters.example-app-path >> && ./test_entrypoint.sh << parameters.bb-version >>
+            cd << parameters.example-app-path >> && ./test_entrypoint.sh --version << parameters.bb-version >>
 
             # Check for testCustomParameters.json
             if [ -f << parameters.example-app-path >>/testCustomParameters.json ]; then
@@ -53,7 +58,7 @@ jobs:
             fi
 
       - store_test_results:
-          path: << parameters.test-suite-path >>/result/<< parameters.bb-version >>_example_result.message
+          path: << parameters.test-suite-path >>/result
       - checkout
       - run:
           name: Export test results
@@ -65,10 +70,10 @@ jobs:
                 echo "Report file has to be available under ${TEST_RESULT_REPORT_PATH} directory"
                 exit 1
             fi
-            echo ${TEST_RESULT_STORAGE_URL}
+
             if [[ -z "${TEST_RESULTS_STORAGE_API_KEY}" ]]; then
               echo "No Test Result Storage API Key detected."
-              echo "Please set the TEST_RESULTS_STORAGE_API_KEY environment variable. test mess"
+              echo "Please set the TEST_RESULTS_STORAGE_API_KEY environment variable."
               echo "Aborting test result export."
               exit 1
             fi
@@ -84,7 +89,7 @@ jobs:
               # Meta file is not mandatory but curl will return 26 code if it's missing.
               curl -v -F buildingBlock=${CIRCLE_PROJECT_REPONAME} \
                 -F report=@${TEST_RESULT_REPORT_PATH}             \
-                -F version=<< parameters.bb-version >>            \ 
+                -F version=<< parameters.bb-version >>            \
                 -F META=@${TEST_PRODUCT_META_PATH}                \
                 -F testSuite=<< parameters.test-suite-name >>     \
                 -F testApp=<< parameters.example-app-name >>      \
