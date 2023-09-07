@@ -23,7 +23,9 @@ jobs:
           command: |
             git clone . temp_repo
             cd temp_repo
+            git log -1
             git checkout << parameters.bb-version >>
+            git log -1
             BASE_NAME=$(basename << parameters.test-suite-path >>)
             DIR_NAME=$(dirname << parameters.test-suite-path >>)
             echo ${BASE_NAME}
@@ -31,6 +33,9 @@ jobs:
             echo "ls:"
             ls
             echo "ls^"
+            pwd
+            echo "ls dir name: "
+            ls ../$DIR_NAME
             mkdir -p ../$DIR_NAME
             cp -r $DIR_NAME/$BASE_NAME ../$DIR_NAME/
             cd ..
