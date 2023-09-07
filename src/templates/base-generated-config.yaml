@@ -26,17 +26,8 @@ jobs:
             cd temp_repo
             git fetch --tags
             git checkout tags/<< parameters.bb-version >>
-            git log -1
-
-            echo "Listing temp_repo contents:"
-            ls
-            echo "ls^"
             rm -rf << parameters.test-suite-path >>
             cp -r test/* << parameters.test-suite-path >>
-            NUM_FILES=$(find << parameters.test-suite-path >> -type f | wc -l)
-            echo "Number of files in << parameters.test-suite-path >>: $NUM_FILES"
-
-            # Clean up
             cd ..
             rm -rf temp_repo
 
@@ -55,14 +46,6 @@ jobs:
             else
               echo "File testCustomParameters.json does not exist in << parameters.example-app-path >>."
             fi
-
-            echo "ls:"
-            ls
-            echo "ls^"
-            echo "pwd:"
-            pwd
-            echo "ls << parameters.test-suite-path >> :"
-            ls << parameters.test-suite-path >>
 
             # Execute gherkin tests for given application using test_entrypoint.sh
             chmod u+x << parameters.test-suite-path >>/test_entrypoint.sh
