@@ -26,6 +26,11 @@ jobs:
             git checkout << parameters.bb-version >>
             BASE_NAME=$(basename << parameters.test-suite-path >>)
             DIR_NAME=$(dirname << parameters.test-suite-path >>)
+            echo ${BASE_NAME}
+            echo ${DIR_NAME}
+            echo "ls:"
+            ls
+            echo "ls^"
             mkdir -p ../$DIR_NAME
             cp -r $DIR_NAME/$BASE_NAME ../$DIR_NAME/
             cd ..
@@ -46,6 +51,10 @@ jobs:
             else
               echo "File testCustomParameters.json does not exist in << parameters.example-app-path >>."
             fi
+
+            echo "ls:"
+            ls
+            echo "ls^"
 
             # Execute gherkin tests for given application using test_entrypoint.sh
             chmod u+x << parameters.test-suite-path >>/test_entrypoint.sh
