@@ -26,10 +26,6 @@ jobs:
             git checkout << parameters.bb-version >>
             BASE_NAME=$(basename << parameters.test-suite-path >>)
             DIR_NAME=$(dirname << parameters.test-suite-path >>)
-
-            echo "BASE_NAME: $BASE_NAME"
-            echo "DIR_NAME: $DIR_NAME"
-
             mkdir -p ../$DIR_NAME
             cp -r $DIR_NAME/$BASE_NAME ../$DIR_NAME/
             cd ..
@@ -96,7 +92,6 @@ jobs:
               # Meta file is not mandatory but curl will return 26 code if it's missing.
               curl -v -F buildingBlock=${CIRCLE_PROJECT_REPONAME} \
                 -F report=@${TEST_RESULT_REPORT_PATH}             \
-                -F version=<< parameters.bb-version >>            \
                 -F META=@${TEST_PRODUCT_META_PATH}                \
                 -F testSuite=<< parameters.test-suite-name >>     \
                 -F testApp=<< parameters.example-app-name >>      \
@@ -106,7 +101,6 @@ jobs:
             else
               curl -v -F buildingBlock=${CIRCLE_PROJECT_REPONAME} \
                 -F report=@${TEST_RESULT_REPORT_PATH}             \
-                -F version=<< parameters.bb-version >>            \
                 -F testSuite=<< parameters.test-suite-name >>     \
                 -F testApp=<< parameters.example-app-name >>      \
                 -F sourceBranch=${CIRCLE_BRANCH}                  \
