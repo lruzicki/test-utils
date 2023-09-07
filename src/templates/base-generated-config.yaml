@@ -21,24 +21,40 @@ jobs:
       - run:
           name: Checkout Test Suite from Specific Version
           command: |
+            # Clone repository into a temporary directory and switch to the specified tag
             git clone . temp_repo
             cd temp_repo
+            git fetch --tags
+            git checkout tags/<< parameters.bb-version >>
             git log -1
-            git checkout << parameters.bb-version >>
-            git log -1
+
+            # Parse the base and directory names from the parameter
             BASE_NAME=$(basename << parameters.test-suite-path >>)
             DIR_NAME=$(dirname << parameters.test-suite-path >>)
+
             echo "BASE_NAME: ${BASE_NAME}"
             echo "DIR_NAME: ${DIR_NAME}"
-            echo "parameters.test-suite-path << parameters.test-suite-path >>"
-            echo "ls:"
+            echo "parameters.test-suite-path: << parameters.test-suite-path >>"
+
+            echo "Listing temp_repo contents:"
             ls
             echo "ls^"
-            pwd
-            echo "ls dir name: "
-            ls DIR_NAME
-            mkdir -p ..$DIR_NAME
-            cp -r $DIR_NAME/$BASE_NAME ..$DIR_NAME/
+
+            # Check if the directory exists in the temporary repository
+            if [ -d "$DIR_NAME/$BASE_NAME" ]; then
+              echo "Listing $DIR_NAME contents:"
+              ls $DIR_NAME
+
+              # Create the destination directory if it doesn't exist
+              mkdir -p ..$DIR_NAME
+
+              # Copy the test suite files, overwriting existing ones
+              cp -r $DIR_NAME/$BASE_NAME ..$DIR_NAME/
+            else
+              echo "Directory $DIR_NAME/$BASE_NAME does not exist in temp_repo."
+            fi
+
+            # Clean up
             cd ..
             rm -rf temp_repo
 
