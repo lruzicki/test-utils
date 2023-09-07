@@ -35,9 +35,9 @@ jobs:
             echo "ls^"
             pwd
             echo "ls dir name: "
-            ls ../$DIR_NAME
-            mkdir -p ../$DIR_NAME
-            cp -r $DIR_NAME/$BASE_NAME ../$DIR_NAME/
+            ls ..$DIR_NAME
+            mkdir -p ..$DIR_NAME
+            cp -r $DIR_NAME/$BASE_NAME ..$DIR_NAME/
             cd ..
             rm -rf temp_repo
 
