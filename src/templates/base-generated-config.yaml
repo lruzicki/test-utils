@@ -61,6 +61,8 @@ jobs:
             echo "ls^"
             echo "pwd:"
             pwd
+            echo "ls << parameters.example-app-path >> :"
+            ls << parameters.example-app-path >>
 
             # Execute gherkin tests for given application using test_entrypoint.sh
             chmod u+x << parameters.test-suite-path >>/test_entrypoint.sh
