@@ -28,31 +28,13 @@ jobs:
             git checkout tags/<< parameters.bb-version >>
             git log -1
 
-            # Parse the base and directory names from the parameter
-            BASE_NAME=$(basename << parameters.test-suite-path >>)
-            DIR_NAME=$(dirname << parameters.test-suite-path >>)
-
-            echo "BASE_NAME: ${BASE_NAME}"
-            echo "DIR_NAME: ${DIR_NAME}"
-            echo "parameters.test-suite-path: << parameters.test-suite-path >>"
-
             echo "Listing temp_repo contents:"
             ls
             echo "ls^"
+            echo "Number of files in << parameters.test-suite-path >>: $NUM_FILES"
 
-            # Check if the directory exists in the temporary repository
-            if [ -d "$DIR_NAME/$BASE_NAME" ]; then
-              echo "Listing $DIR_NAME contents:"
-              ls $DIR_NAME
-
-              # Create the destination directory if it doesn't exist
-              mkdir -p ..$DIR_NAME
-
-              # Copy the test suite files, overwriting existing ones
-              cp -r $DIR_NAME/$BASE_NAME ..$DIR_NAME/
-            else
-              echo "Directory $DIR_NAME/$BASE_NAME does not exist in temp_repo."
-            fi
+            cp -r test << parameters.test-suite-path >>
+            echo "Number of files in << parameters.test-suite-path >>: $NUM_FILES"
 
             # Clean up
             cd ..
