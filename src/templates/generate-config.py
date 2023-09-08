@@ -69,34 +69,12 @@ def list_test_executions(example_apps, git_tags):
                 'name': f'{app_name} ({suite_name} test suite , version: {tag})'
             }
             test_executions.append({"test-example": new_example})
-
-    print("Generated test executions:", test_executions)
     return test_executions
-
-# def list_test_executions(example_apps, test_suites, git_tags): 
-#   # Test are executed for all cancidate applications tested against all test suites
-#   test_executions = []
-#   for element in itertools.product(example_apps, test_suites, git_tags):
-#     app, suite, tag = element 
-#     if not (is_valid(app) and is_valid(suite)):
-#       print(F'---\nTest harness for:\n\tApp: {app}\n\tTest Suite: {suite}"\nwill not be executed.\ntest_entrypoint.sh is missing.\n---')
-#       continue
-#     app_path, app_name = app_and_name_from_path(app)
-#     suite_path, suite_name = app_and_name_from_path(suite)
-#     new_example = {
-#       'example-app-path': app_path, 'test-suite-name': suite_name, 
-#       'example-app-name': app_name, 'test-suite-path': suite_path,
-#       'bb-version': tag,
-#       'name': F'{app_name} ({suite_name} test suite , version: {tag})'
-#     }
-#     test_executions.append({F"test-example": new_example})
-#   return test_executions
 
 with open(base_config) as f:
     circle_config = yaml.safe_load(f)
     
     available_examples = [name for name in pathlib.Path(examples_path).iterdir() if os.path.isdir(name)]
-    available_test_suites = [name for name in pathlib.Path(test_suites_path).iterdir() if os.path.isdir(name)]
     available_tags = get_git_tags()
     circle_config['workflows']['test_everything']['jobs'] = list_test_executions(available_examples, available_tags)
 
