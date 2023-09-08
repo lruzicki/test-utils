@@ -31,7 +31,7 @@ def is_valid(test_harness_path):
 def get_git_tags():
   regex = "v(0|([1-9][0-9]*)\.(0|([1-9][0-9]*))\.(0|[1-9][0-9]*))|latest"
   tags = subprocess.getoutput(f"git tag -l | grep -E -w '{regex}'")
-  return versions.strip().split("\n")
+  return tags.strip().split("\n")
 
 def list_test_suites_for_version():
     cmd = f"git checkout {version} && ls {test_suites_path}"
