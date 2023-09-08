@@ -25,8 +25,18 @@ jobs:
             git clone . temp_repo
             cd temp_repo
             git checkout tags/<< parameters.bb-version >>
-            rm -rf << parameters.test-suite-path >>
+
+            # Debug: Print existing directories
+            echo "Listing directories in $(pwd)"
+            ls -l
+            
+            # Check if target directory exists, and create it if it doesn't
+            if [ ! -d "<< parameters.test-suite-path >>" ]; then
+              mkdir -p << parameters.test-suite-path >>
+            fi
+
             cp -r test/* << parameters.test-suite-path >>
+
             cd .. && rm -rf temp_repo
 
       - run:
