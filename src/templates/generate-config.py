@@ -12,6 +12,7 @@ base_config = os.path.join(dir_path, 'base-generated-config.yaml')
 generated_config = os.path.join(dir_path, 'generated.yml')
 examples_path = os.path.join(pathlib.Path(dir_path).parent, "examples")
 test_suites_path = os.path.join(pathlib.Path(dir_path).parent, "test")
+main_branch = "main"
 
 
 def is_valid(test_harness_path): 
@@ -53,6 +54,7 @@ def list_test_executions(example_apps, git_tags):
             continue
 
         suites_for_tag = list_test_suites_for_tag(tag)
+        suites_for_tag.append(main_branch)
         for suite in suites_for_tag:
             suite_path = os.path.join(test_suites_path, suite)
             if not os.path.exists(suite_path) or not is_valid(suite_path):
