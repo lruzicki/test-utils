@@ -33,7 +33,7 @@ def get_git_tags():
   return tags.strip().split("\n")
 
 def list_test_suites_for_tag(tag):
-    cmd = f"git checkout tags/{tag} -- {test_suites_path} && ls {test_suites_path}"
+    cmd = f"git checkout {tag} && ls {test_suites_path}"
     output = subprocess.getoutput(cmd).strip()
     if "error:" in output:
         print(f"Failed to checkout or list test suites for tag: {tag}")
