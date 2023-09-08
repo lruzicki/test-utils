@@ -54,7 +54,6 @@ def list_test_executions(example_apps, git_tags):
             continue
 
         suites_for_tag = list_test_suites_for_tag(tag)
-        suites_for_tag.append(main_branch)
         for suite in suites_for_tag:
             suite_path = os.path.join(test_suites_path, suite)
             if not os.path.exists(suite_path) or not is_valid(suite_path):
@@ -78,6 +77,7 @@ with open(base_config) as f:
     
     available_examples = [name for name in pathlib.Path(examples_path).iterdir() if os.path.isdir(name)]
     available_tags = get_git_tags()
+    available_tags.append(main_branch)
     circle_config['workflows']['test_everything']['jobs'] = list_test_executions(available_examples, available_tags)
 
     with open(generated_config, "w") as w: 
