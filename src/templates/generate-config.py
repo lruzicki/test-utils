@@ -66,6 +66,11 @@ def list_test_executions(example_apps, test_suites, git_tags):
               'name': f'{app_name} ({suite_name} test suite , version: {tag})'
           }
           test_executions.append({"test-example": new_example})
+  print("Generated test executions:", test_executions)
+  print("Generated test executions:", test_executions)
+  print("Generated test executions:", test_executions)
+  print("Generated test executions:", test_executions)
+  print("Generated test executions:", test_executions)
 
   return test_executions
 
