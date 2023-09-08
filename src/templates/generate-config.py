@@ -33,7 +33,7 @@ def get_git_tags():
   tags = subprocess.getoutput(f"git tag -l | grep -E -w '{regex}'")
   return tags.strip().split("\n")
 
-def list_test_suites_for_version():
+def list_test_suites_for_version(version):
     cmd = f"git checkout {version} && ls {test_suites_path}"
     output = subprocess.getoutput(cmd).strip()
     if "error:" in output:
