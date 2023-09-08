@@ -33,8 +33,8 @@ def get_git_tags():
   return tags.strip().split("\n")
 
 def list_test_suites_for_tag(tag):
-  cmd = f"git checkout tags/{tag} -- test_suites_path && ls -d */"
-  return subprocess.getoutput(cmd).strip().split("\n")
+    cmd = f"git checkout tags/{tag} -- {test_suites_path} && ls {test_suites_path} -d */"
+    return subprocess.getoutput(cmd).strip().split("\n")
 
 def app_and_name_from_path(test_harness_path): 
   test_path = str(pathlib.Path(test_harness_path).absolute())
