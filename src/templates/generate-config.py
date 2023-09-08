@@ -34,45 +34,44 @@ def get_git_tags():
 
 def list_test_suites_for_tag(tag):
     cmd = f"git checkout tags/{tag} -- {test_suites_path} && ls {test_suites_path}"
-    return subprocess.getoutput(cmd).strip().split("\n")
+    output = subprocess.getoutput(cmd).strip()
+    if "error:" in output:
+        print(f"Failed to checkout or list test suites for tag: {tag}")
+        return []
+    return output.split("\n")
 
 def app_and_name_from_path(test_harness_path): 
   test_path = str(pathlib.Path(test_harness_path).absolute())
   test_name = str(os.path.basename(test_path))  
   return test_path, test_name
 
-def list_test_executions(example_apps, test_suites, git_tags): 
-  test_executions = []
-  for element in itertools.product(example_apps, git_tags):
-      app, tag = element
-      if not is_valid(app):
-          print(f"---\nApp: {app}\nwill not be executed.\ntest_entrypoint.sh is missing.\n---")
-          continue
+def list_test_executions(example_apps, git_tags): 
+    test_executions = []
+    for app, tag in itertools.product(example_apps, git_tags):
+        if not is_valid(app):
+            print(f"---\nApp: {app}\nwill not be executed.\ntest_entrypoint.sh is missing.\n---")
+            continue
 
-      suites_for_tag = list_test_suites_for_tag(tag)
+        suites_for_tag = list_test_suites_for_tag(tag)
+        for suite in suites_for_tag:
+            suite_path = os.path.join(test_suites_path, suite)
+            if not os.path.exists(suite_path) or not is_valid(suite_path):
+                print(f"---\nTest Suite: {suite}\nwill not be executed.\ntest_entrypoint.sh is missing.\n---")
+                continue
 
-      for suite in suites_for_tag:
-          if not is_valid(suite):
-              print(f"---\nTest Suite: {suite}\nwill not be executed.\ntest_entrypoint.sh is missing.\n---")
-              continue
+            app_path, app_name = app_and_name_from_path(app)
+            _, suite_name = app_and_name_from_path(suite_path)
 
-          app_path, app_name = app_and_name_from_path(app)
-          suite_path, suite_name = app_and_name_from_path(suite)
+            new_example = {
+                'example-app-path': app_path, 'test-suite-name': suite_name,
+                'example-app-name': app_name, 'test-suite-path': suite_path,
+                'bb-version': tag,
+                'name': f'{app_name} ({suite_name} test suite , version: {tag})'
+            }
+            test_executions.append({"test-example": new_example})
 
-          new_example = {
-              'example-app-path': app_path, 'test-suite-name': suite_name, 
-              'example-app-name': app_name, 'test-suite-path': suite_path,
-              'bb-version': tag,
-              'name': f'{app_name} ({suite_name} test suite , version: {tag})'
-          }
-          test_executions.append({"test-example": new_example})
-  print("Generated test executions:", test_executions)
-  print("Generated test executions:", test_executions)
-  print("Generated test executions:", test_executions)
-  print("Generated test executions:", test_executions)
-  print("Generated test executions:", test_executions)
-
-  return test_executions
+    print("Generated test executions:", test_executions)
+    return test_executions
 
 # def list_test_executions(example_apps, test_suites, git_tags): 
 #   # Test are executed for all cancidate applications tested against all test suites
