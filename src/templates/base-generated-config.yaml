@@ -24,12 +24,10 @@ jobs:
             # Clone repository into a temporary directory and switch to the specified tag
             git clone . temp_repo
             cd temp_repo
-            git fetch --tags
             git checkout tags/<< parameters.bb-version >>
             rm -rf << parameters.test-suite-path >>
             cp -r test/* << parameters.test-suite-path >>
-            cd ..
-            rm -rf temp_repo
+            cd .. && rm -rf temp_repo
 
       - run:
           name: Execute tests
